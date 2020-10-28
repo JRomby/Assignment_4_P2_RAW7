@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <Reference Include="DataService">
-      <HintPath>..\..\..\..\Downloads\DataService\obj\Release\netcoreapp3.1\DataService.dll</HintPath>
+      <HintPath>DataService\DataService.dll</HintPath>
     </Reference>
   </ItemGroup>
 
