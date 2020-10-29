@@ -1,0 +1,52 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:9146",
+      "sslPort": 44326
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+    "profiles": {
+        "IIS Express": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "launchUrl": "api/categories",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "applicationUrl": "http://localhost:5001"
+        },
+        "IIS-Staging": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Staging",
+                "ASPNETCORE_DETAILEDERRORS": "1",
+                "ASPNETCORE_SHUTDOWNTIMEOUTSECONDS": "3"
+            },
+            "applicationUrl": "http://localhost:5001"
+        },
+        "WebServiceStaging": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Staging",
+                "ASPNETCORE_DETAILEDERRORS": "1",
+                "ASPNETCORE_SHUTDOWNTIMEOUTSECONDS": "3"
+            },
+            "applicationUrl": "http://localhost:5001"
+        },
+        "WebService": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Staging",
+                "ASPNETCORE_DETAILEDERRORS": "1",
+                "ASPNETCORE_SHUTDOWNTIMEOUTSECONDS": "3"
+            },
+            "applicationUrl": "https://localhost:5001"
+        }
+    }
+}
