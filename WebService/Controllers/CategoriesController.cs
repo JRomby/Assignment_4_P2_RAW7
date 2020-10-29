@@ -1,5 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using System.Text.Json;
+using DataService;
+using Microsoft.AspNetCore.Http;
 
 namespace WebService.Controllers
 {
@@ -8,24 +16,64 @@ namespace WebService.Controllers
         private readonly DataService.DataService _service = new DataService.DataService();
 
         [HttpGet]
-        //http://localhost:5001/api/categories
         [Route("api/categories")]
-        public  IEnumerable<DataService.Categories> GetCategories() =>  _service.GetCategories().ToArray();
+        public  ActionResult GetCategories()
+        {
+            var categories = _service.GetCategories().ToArray();
+            if (categories.Length == 0)
+                return NotFound();
+            return Ok(categories);
+        }
 
-        //http://localhost:5001/api/categories/1
+        [HttpGet]
         [Route("api/categories/{id}")]
-        public DataService.Categories GetCategory(int id) => _service.GetCategory(id);
+        public ActionResult GetCategory(int id)
+        {
+            var category = _service.GetCategory(id);
+            if (category == null)
+                return NotFound();
+            return Ok(category);
+        }
 
-        //http://localhost:5001/api/categories/create/smed+smed
-        [Route("api/categories/create/{name}+{description}")]
-        public DataService.Categories Details(string name,  string description) => _service.CreateCategory(name, description);
+        [HttpPost]
+        [Route("api/categories/")]
+        public CreatedResult CreateCategory([FromBody]JsonElement name)
+        {
+            var stringname = JsonSerializer.Serialize(name);
+            var names = stringname.Split(":");
+            var name1 = names[1];
+            var name2 = names[2];
 
-        //http://localhost:5001/api/categories/delete/10
-        [Route("api/categories/delete/{id}")]
-        public bool DeleteCategory(int id) => _service.DeleteCategory(id);
+            var names2 = name1.Split(",");
+            var name3 = names2[0];
+            name3 = name3.Substring(1, name3.Length-2);
+            name2 = name2.Substring(0, name2.Length-1);
+            Categories category = _service.CreateCategory(name3, name2);
+            category = _service.GetCategory(category.Categoryid);
 
-        [Route("api/categories/update/{id}+{name}+{description}")]
-        //http://localhost:5001/api/categories/update/9+smed2+smed2
-        public bool UpdateCategory(int id, string name, string description) => _service.UpdateCategory(id, name, description);
+            //return Ok(category);
+
+            return new CreatedResult("created", category);
+        }
+
+        [HttpDelete]
+        [Route("api/categories/{id}")]
+        public ActionResult DeleteCategory(int id = 9)
+        {
+            var category = _service.GetCategory(id);
+            if (category == null)
+                return NotFound();
+            return Ok(_service.DeleteCategory(id));
+        }
+
+        [HttpPut]
+        [Route("api/categories/{id}")]
+        public ActionResult UpdateCategory(int id, string name, string description)
+        {
+            var category = _service.GetCategory(id);
+            if (category == null)
+                return NotFound();
+            return Ok(_service.UpdateCategory(id, name, description));
+        }
     }
 }
