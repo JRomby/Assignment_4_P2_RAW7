@@ -42,6 +42,7 @@ namespace WebService.Controllers
         [Route("api/categories/")]
         public CreatedResult CreateCategory([FromBody]JsonElement post)
         {
+            //Parses the incoming JSON object and uses the service package to create a new category.
             var incomingPost = JObject.Parse((post.ToString()));
             var postDescription = incomingPost["Description"];
             var postName = incomingPost["Name"];
@@ -49,24 +50,6 @@ namespace WebService.Controllers
             Categories category = _service.CreateCategory((string)postName, (string)postDescription);
             category = _service.GetCategory(category.Categoryid);
             return new CreatedResult("created", category);
-
-            //Fix this for god's sake
-            //Parse the JsonElement with JObject
-            /*var stringname = JsonSerializer.Serialize(name);
-            var names = stringname.Split(":");
-            var name1 = names[1];
-            var name2 = names[2];
-
-            var names2 = name1.Split(",");
-            var name3 = names2[0];
-            name3 = name3.Substring(1, name3.Length-2);
-            name2 = name2.Substring(0, name2.Length-1);
-            Categories category = _service.CreateCategory(name3, name2);
-            category = _service.GetCategory(category.Categoryid);
-
-            //return Ok(category);
-
-            return new CreatedResult("created", category);*/
         }
 
         [HttpDelete]
@@ -83,7 +66,7 @@ namespace WebService.Controllers
         [Route("api/categories/{id}")]
         public ActionResult UpdateCategory(int id, [FromBody] JsonElement element)
         {
-            //Clean this up a bit
+            //Parses object to unpack and updates a given category from the chosen parameters.
             var update = JObject.Parse((element.ToString()));
             var updateid = update["Id"];
             var updatedescription = update["Description"];
