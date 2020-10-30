@@ -40,11 +40,19 @@ namespace WebService.Controllers
 
         [HttpPost]
         [Route("api/categories/")]
-        public CreatedResult CreateCategory([FromBody]JsonElement name)
+        public CreatedResult CreateCategory([FromBody]JsonElement post)
         {
+            var incomingPost = JObject.Parse((post.ToString()));
+            var postDescription = incomingPost["Description"];
+            var postName = incomingPost["Name"];
+
+            Categories category = _service.CreateCategory((string)postName, (string)postDescription);
+            category = _service.GetCategory(category.Categoryid);
+            return new CreatedResult("created", category);
+
             //Fix this for god's sake
             //Parse the JsonElement with JObject
-            var stringname = JsonSerializer.Serialize(name);
+            /*var stringname = JsonSerializer.Serialize(name);
             var names = stringname.Split(":");
             var name1 = names[1];
             var name2 = names[2];
@@ -58,7 +66,7 @@ namespace WebService.Controllers
 
             //return Ok(category);
 
-            return new CreatedResult("created", category);
+            return new CreatedResult("created", category);*/
         }
 
         [HttpDelete]
