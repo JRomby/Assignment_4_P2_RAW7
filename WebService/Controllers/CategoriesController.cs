@@ -8,6 +8,9 @@ using System.Text;
 using System.Text.Json;
 using DataService;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebService.Controllers
 {
@@ -39,6 +42,8 @@ namespace WebService.Controllers
         [Route("api/categories/")]
         public CreatedResult CreateCategory([FromBody]JsonElement name)
         {
+            //Fix this for god's sake
+            //Parse the JsonElement with JObject
             var stringname = JsonSerializer.Serialize(name);
             var names = stringname.Split(":");
             var name1 = names[1];
@@ -68,12 +73,18 @@ namespace WebService.Controllers
 
         [HttpPut]
         [Route("api/categories/{id}")]
-        public ActionResult UpdateCategory(int id, string name, string description)
+        public ActionResult UpdateCategory(int id, [FromBody] JsonElement element)
         {
+            //Clean this up a bit
+            var update = JObject.Parse((element.ToString()));
+            var updateid = update["Id"];
+            var updatedescription = update["Description"];
+            var updatename = update["Name"];
             var category = _service.GetCategory(id);
+
             if (category == null)
                 return NotFound();
-            return Ok(_service.UpdateCategory(id, name, description));
+            return Ok(_service.UpdateCategory((Int16)updateid, (string)updatename, (string)updatedescription));
         }
     }
 }
